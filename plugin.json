@@ -1,0 +1,13 @@
+﻿{
+  "ID": "62414FAD40D349CB9FB69181C3118B6A",
+  "ActionKeyword": "an",
+  "IsGlobal": false,
+  "Name": "AltVNatives",
+  "Author": "zziger",
+  "Version": "1.0.0",
+  "Language": "csharp",
+  "Website": "https://github.com/zziger/altv-powertoys-run-natives",
+  "ExecuteFileName": "AltV.PowerToysRun.Natives.dll",
+  "IcoPathDark": "Images\\altv.green.png",
+  "IcoPathLight": "Images\\altv.black.png"
+}
