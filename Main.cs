@@ -4,7 +4,9 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.PowerToys.Settings.UI.Library;
 using Wox.Plugin;
 
 namespace AltV.PowerToysRun.Natives;
@@ -175,6 +177,19 @@ public class Main : IPlugin, IContextMenu, IDisposable
                 FontFamily = "Segoe MDL2 Assets",
                 AcceleratorKey = Key.Return,
                 AcceleratorModifiers = ModifierKeys.Shift
+            },
+            new()
+            {
+                Title = "Copy capitalized name (Ctrl + Shift + Enter)",
+                Action = _ =>
+                {
+                    Clipboard.SetText(e.native.AltName[0].ToString().ToUpperInvariant() + e.native.AltName[1..]);
+                    return false;
+                },
+                Glyph = "\uE8C8",
+                FontFamily = "Segoe MDL2 Assets",
+                AcceleratorKey = Key.Return,
+                AcceleratorModifiers = ModifierKeys.Shift | ModifierKeys.Control,
             }
         };
     }
