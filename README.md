@@ -9,6 +9,7 @@ Searches alt:V native db reference in PowerToys Run.<br>
 * `Enter` opens new tab in browser with the native
 * `Ctrl + Enter` copies link to the native to the clipboard
 * `Shift + Enter` copies native name to the clipboard
+* `Ctrl + Shift + Enter` copies capitalized native name to the clipboard
 
 ## Installation
 
