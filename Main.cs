@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -154,11 +155,7 @@ public class Main : IPlugin, IContextMenu, IDisposable
             new()
             {
                 Title = "Copy link (Ctrl + Enter)",
-                Action = _ =>
-                {
-                    Clipboard.SetDataObject(link, true);
-                    return false;
-                },
+                Action = _ => Copy(link),
                 Glyph = "\uE71B",
                 FontFamily = "Segoe MDL2 Assets",
                 AcceleratorKey = Key.Return,
@@ -167,11 +164,7 @@ public class Main : IPlugin, IContextMenu, IDisposable
             new()
             {
                 Title = "Copy name (Shift + Enter)",
-                Action = _ =>
-                {
-                    Clipboard.SetDataObject(e.native.AltName, true);
-                    return false;
-                },
+                Action = _ => Copy(e.native.AltName),
                 Glyph = "\uE8C8",
                 FontFamily = "Segoe MDL2 Assets",
                 AcceleratorKey = Key.Return,
@@ -180,17 +173,34 @@ public class Main : IPlugin, IContextMenu, IDisposable
             new()
             {
                 Title = "Copy capitalized name (Ctrl + Shift + Enter)",
-                Action = _ =>
-                {
-                    Clipboard.SetDataObject(e.native.AltName[0].ToString().ToUpperInvariant() + e.native.AltName[1..], true);
-                    return false;
-                },
+                Action = _ => Copy(e.native.AltName[0].ToString().ToUpperInvariant() + e.native.AltName[1..]),
                 Glyph = "\uE8C8",
                 FontFamily = "Segoe MDL2 Assets",
                 AcceleratorKey = Key.Return,
                 AcceleratorModifiers = ModifierKeys.Shift | ModifierKeys.Control,
             }
         };
+    }
+
+    private bool Copy(string text)
+    {
+        var ret = false;
+        var thread = new Thread(_ =>
+        {
+            try
+            {
+                Clipboard.SetText(text);
+                ret = true;
+            }
+            catch (ExternalException)
+            {
+                MessageBox.Show("Failed to copy text");
+            }
+        });
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.Start();
+        thread.Join();
+        return ret;
     }
 
     public void Dispose()
