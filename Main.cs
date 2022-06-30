@@ -27,9 +27,8 @@ public class Main : IPlugin, IContextMenu, IDisposable
             await InitAsync();
             _initialized = true;
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            File.AppendAllText(Path.Combine(context.CurrentPluginMetadata.PluginDirectory, "error.log"), e.ToString());
             _initAttempt++;
             if (_initAttempt > 5) return;
             _ = Task.Delay(2000).ContinueWith(_ => Init(context));
@@ -157,7 +156,7 @@ public class Main : IPlugin, IContextMenu, IDisposable
                 Title = "Copy link (Ctrl + Enter)",
                 Action = _ =>
                 {
-                    Clipboard.SetText(link);
+                    Clipboard.SetDataObject(link, true);
                     return false;
                 },
                 Glyph = "\uE71B",
@@ -170,7 +169,7 @@ public class Main : IPlugin, IContextMenu, IDisposable
                 Title = "Copy name (Shift + Enter)",
                 Action = _ =>
                 {
-                    Clipboard.SetText(e.native.AltName);
+                    Clipboard.SetDataObject(e.native.AltName, true);
                     return false;
                 },
                 Glyph = "\uE8C8",
@@ -183,7 +182,7 @@ public class Main : IPlugin, IContextMenu, IDisposable
                 Title = "Copy capitalized name (Ctrl + Shift + Enter)",
                 Action = _ =>
                 {
-                    Clipboard.SetText(e.native.AltName[0].ToString().ToUpperInvariant() + e.native.AltName[1..]);
+                    Clipboard.SetDataObject(e.native.AltName[0].ToString().ToUpperInvariant() + e.native.AltName[1..], true);
                     return false;
                 },
                 Glyph = "\uE8C8",
